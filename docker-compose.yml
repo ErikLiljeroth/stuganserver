@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  app:
+    image: stuganapp
+    command: "streamlit run dashboard.py >> app_log.txt 2>&1"
+    ports:
+      - 8501:8501
+    working_dir: /app
+    volumes:
+      - ./:/app
+
+  stugandb:
+    image: mariadb:latest
+    ports:
+      - 3306:3306
+    environment:
+      - MARIADB_ROOT_PASSWORD=$DB_ROOT_PASSWORD # specified in .env
+    volumes:
+      - stugan-data:/var/lib/mysql
+      - mariadb_config:/etc/mysql
+      - ./initiate_stugandb.sql:/docker-entrypoint-initdb.d/1.sql # sql-script to run on DB container creation
+
+volumes:
+  stugan-data:
+    external: true
+    name: stugan-data
+  mariadb_config:
+    external: true
+    name: mariadb_config

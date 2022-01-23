@@ -55,7 +55,7 @@ yesterday_data = all_data.loc[all_data['dtg'] == yesterday].squeeze(axis=0)
 #----------------------------
 
 # Plot title
-buffh1, header, buffh2 = st.columns([1,4,1])
+buffh1, header, buffh2 = st.columns([0.3,6,0.3])
 header.title('Data krypgrund sommarstugan')
 
 # Sidebar & filtering logic for specific data
@@ -74,18 +74,18 @@ if (year != 'all data'):
 header.write('Appen visar aktuell och historisk data för temperatur till vänster och luftfuktighet till höger.\n Under den nuvarande datan finns förändringen jämfört med samma tidpunkt föregående dygn.')
 
 
-buff1, c1, buff2, c2, buff3 = st.columns([1,2,0.1,2,1])
+buff1, c1, buff2, c2, buff3 = st.columns([0.3,3,0.1,3,0.3])
 
 if not yesterday_data.empty:
     delta_temp = np.round(current_data.temperature - yesterday_data.temperature, decimals=1)
     delta_humi = np.round(current_data.relative_humidity - yesterday_data.relative_humidity, decimals=1)
     if abs(delta_temp) > 0:
-        c1.metric('Nuvarande temperatur', f'{current_data.temperature}\N{DEGREE SIGN}C', f'{delta_temp}\N{DEGREE SIGN}C', delta_color='off')
+        c1.metric('temperatur just nu', f'{current_data.temperature}\N{DEGREE SIGN}C', f'{delta_temp}\N{DEGREE SIGN}C', delta_color='off')
     if abs(delta_humi) > 0:
-        c2.metric('Nuvarande relativ luftfuktighet', f'{current_data.relative_humidity}%', f'{delta_humi} %-enheter', delta_color='off')
+        c2.metric('relativ luftfuktighet just nu', f'{current_data.relative_humidity}%', f'{delta_humi} %-enheter', delta_color='off')
 else: 
-    c1.metric('Nuvarande temperatur', f'{current_data.temperature}\N{DEGREE SIGN}C' )
-    c2.metric('Nuvarande relativ luftfuktighet', f'{current_data.relative_humidity}%')
+    c1.metric('temperatur just nu', f'{current_data.temperature}\N{DEGREE SIGN}C' )
+    c2.metric('relativ luftfuktighet just nu', f'{current_data.relative_humidity}%')
 
 if year == 'all data':
     df_temp = all_data[['dtg', 'temperature']].copy()

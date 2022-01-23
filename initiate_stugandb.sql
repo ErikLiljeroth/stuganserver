@@ -2,7 +2,6 @@ CREATE DATABASE IF NOT EXISTS stugandata;
 
 USE stugandata;
 
-DROP TABLE IF EXISTS temphumi;
 CREATE TABLE IF NOT EXISTS temphumi(
     dtg DATETIME,
     temperature FLOAT(4, 1),

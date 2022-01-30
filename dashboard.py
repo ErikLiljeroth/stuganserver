@@ -45,10 +45,14 @@ all_data.sort_values(by='dtg')
 # Prepare downloadable csv
 csv = convert_df(all_data)
 
-# --- Compute yesterday's data ---
-current_data = all_data.iloc[-1]
-yesterday = current_data.dtg - timedelta(hours=24)
-yesterday_data = all_data.loc[all_data['dtg'] == yesterday].squeeze(axis=0)
+# --- Compute yesterday's data if exists ---
+if all_data.empty:
+    current_data['temperature'] = None
+    current_data['humidity'] = None
+else:
+    current_data = all_data.iloc[-1]
+    yesterday = current_data.dtg - timedelta(hours=24)
+    yesterday_data = all_data.loc[all_data['dtg'] == yesterday].squeeze(axis=0)
 
 #----------------------------
 #------- Render App ---------
@@ -83,9 +87,11 @@ if not yesterday_data.empty:
         c1.metric('temperatur just nu', f'{current_data.temperature}\N{DEGREE SIGN}C', f'{delta_temp}\N{DEGREE SIGN}C', delta_color='off')
     if abs(delta_humi) > 0:
         c2.metric('relativ luftfuktighet just nu', f'{current_data.relative_humidity}%', f'{delta_humi} %-enheter', delta_color='off')
-else: 
-    c1.metric('temperatur just nu', f'{current_data.temperature}\N{DEGREE SIGN}C' )
-    c2.metric('relativ luftfuktighet just nu', f'{current_data.relative_humidity}%')
+else:
+    temp = current_data['temperature']
+    humi = current_data['humidity']
+    c1.metric('temperatur just nu', f'{temp}\N{DEGREE SIGN}C' )
+    c2.metric('relativ luftfuktighet just nu', f'{humi}%')
 
 if year == 'all data':
     df_temp = all_data[['dtg', 'temperature']].copy()

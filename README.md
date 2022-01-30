@@ -10,7 +10,7 @@ Pull any hardware-compatible MariaDB image from Docker. MariaDB For Raspberry-Pi
 1. Clone this repo
 2. create `secrets.toml` in directory `.streamlit` and specify the following information: 
 ```
-.streamlit/secrets.toml
+# .streamlit/secrets.toml
 
 [mysql]
 host = [...]# Name of Database docker image, or localhost if no container 
@@ -25,6 +25,19 @@ DB_ROOT_PASSWORD=[password of db-root]
 COMPOSE_PROJECT_NAME=[name of docker network]
 ```
 4. Build the Streamlit-app image from Dockerfile 
->`docker build -t [appname]:latest .`
-5. Compose system and run containers
+>`docker build -t stuganapp:latest .`
+5. In file `docker-compose.yml`, change database image name to match used (system-compatible) image
+>
+```
+[...]
+stugandb:
+    image: [db image name]
+[...]
+```
+
+6. Create required volumes for persistent db storage
+>`docker volume create stugan-data`
+
+>`docker volume create mariadb_config`
+7. Compose system and run containers
 >`docker-compose up -d` 

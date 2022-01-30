@@ -47,8 +47,10 @@ csv = convert_df(all_data)
 
 # --- Compute yesterday's data if exists ---
 if all_data.empty:
+    current_data = {}
     current_data['temperature'] = None
     current_data['humidity'] = None
+    yesterday_data = pd.DataFrame()
 else:
     current_data = all_data.iloc[-1]
     yesterday = current_data.dtg - timedelta(hours=24)

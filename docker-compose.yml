@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   app:
+    restart: always
     image: stuganapp
     command: "streamlit run dashboard.py >> app_log.txt 2>&1"
     ports:
@@ -11,6 +12,7 @@ services:
       - ./:/app
 
   stugandb:
+    restart: always
     image: mariadb:latest
     ports:
       - 3306:3306

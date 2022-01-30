@@ -49,7 +49,7 @@ csv = convert_df(all_data)
 if all_data.empty:
     current_data = {}
     current_data['temperature'] = None
-    current_data['humidity'] = None
+    current_data['relative_humidity'] = None
     yesterday_data = pd.DataFrame()
 else:
     current_data = all_data.iloc[-1]
@@ -91,7 +91,7 @@ if not yesterday_data.empty:
         c2.metric('relativ luftfuktighet just nu', f'{current_data.relative_humidity}%', f'{delta_humi} %-enheter', delta_color='off')
 else:
     temp = current_data['temperature']
-    humi = current_data['humidity']
+    humi = current_data['relative_humidity']
     c1.metric('temperatur just nu', f'{temp}\N{DEGREE SIGN}C' )
     c2.metric('relativ luftfuktighet just nu', f'{humi}%')
 

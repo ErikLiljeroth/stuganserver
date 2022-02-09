@@ -29,11 +29,11 @@ PORT = toml_data['mysql']['port']
 # Using the variables we read from secrets.toml
 mydb = msc.connect(host=HOST_NAME, database=DATABASE,user=USER, passwd=PASSWORD, use_pure=True, port=PORT)
 
-@st.cache
+@st.cache(ttl=900)
 def sql_request():
     return pd.read_sql('SELECT * FROM temphumi;', mydb)
 
-@st.cache
+@st.cache(ttl=900)
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
@@ -70,7 +70,7 @@ month_dict = {'jan':1, 'feb':2, 'mar':3, 'apr':4, 'maj':5, 'jun':6, 'jul':7, 'au
 years = list(pd.DatetimeIndex(all_data['dtg']).year) # Filter for unique years
 unique_years = list(np.unique(years))
 unique_years.insert(0, 'all data')
-st.sidebar.markdown('**Välj särkilt år och månad för data:**')
+st.sidebar.markdown('**Välj specifikt år och månad för data:**')
 year  = st.sidebar.selectbox('Välj år', unique_years, index=0) #index=unique_years.index(unique_years[-1])
 if (year != 'all data'):
     month = st.sidebar.selectbox('Välj månad', ['alla månader','jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'])
@@ -113,12 +113,17 @@ if df_temp.empty or df_humidity.empty:
 else:
     fig_temp = px.line(df_temp, x='dtg', y='temperature',markers=True, labels={'dtg':'tid', 'temperature':'temperatur'})
     fig_temp['data'][0]['line']['color']='rgb(202,71,47)'
-    fig_temp.update_layout(showlegend=True)
+    fig_temp.update_layout(showlegend=True,autosize=False)
+    max_temp = np.max(df_temp.temperature)
+    min_temp = np.min(df_temp.temperature)
+    max_humi = np.max(df_humidity.relative_humidity)
+    min_humi = np.min(df_humidity.relative_humidity)
+    fig_temp.update_yaxes(range=[min_temp-10,max_temp+10])
     fig_humidity = px.line(df_humidity, x='dtg', y='relative_humidity', markers=True, labels={'dtg':'tid', 'relative_humidity':'relativ luftfuktighet'})
     fig_humidity['data'][0]['line']['color']='rgb(11,132,165)'
+    fig_humidity.update_yaxes(range=[min_humi-15,max_humi+15])
     c1.plotly_chart(fig_temp, use_container_width = True)
     c2.plotly_chart(fig_humidity, use_container_width = True)
-
 
 # Separating line
 text = '''

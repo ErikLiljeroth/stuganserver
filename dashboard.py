@@ -118,7 +118,7 @@ else:
     min_temp = np.min(df_temp.temperature)
     max_humi = np.max(df_humidity.relative_humidity)
     min_humi = np.min(df_humidity.relative_humidity)
-    fig_temp.update_yaxes(range=[min_temp-10,max_temp+10])
+    fig_temp.update_yaxes(range=[min_temp-5,max_temp+5])
     fig_humidity = px.line(df_humidity, x='dtg', y='relative_humidity', markers=True, labels={'dtg':'tid', 'relative_humidity':'relativ luftfuktighet'})
     fig_humidity['data'][0]['line']['color']='rgb(11,132,165)'
     fig_humidity.update_yaxes(range=[min_humi-15,max_humi+15])

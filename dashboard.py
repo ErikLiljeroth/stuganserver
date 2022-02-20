@@ -29,11 +29,11 @@ PORT = toml_data['mysql']['port']
 # Using the variables we read from secrets.toml
 mydb = msc.connect(host=HOST_NAME, database=DATABASE,user=USER, passwd=PASSWORD, use_pure=True, port=PORT)
 
-@st.cache(ttl=900)
+#@st.cache(ttl=900)
 def sql_request():
     return pd.read_sql('SELECT * FROM temphumi;', mydb)
 
-@st.cache(ttl=900)
+#@st.cache(ttl=900)
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
